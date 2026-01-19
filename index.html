@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bhinneka Production - SPK System</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
     <style>
         :root {
             --primary: #2563eb;
@@ -14,7 +16,10 @@
             --text-dark: #0f172a;
             --text-light: #64748b;
             --danger: #ef4444;
+            --success: #10b981;
             --border: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
         }
 
         * { box-sizing: border-box; transition: all 0.2s ease; }
@@ -24,78 +29,186 @@
             background-color: var(--bg-body);
             color: var(--text-dark);
             margin: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden; /* Mencegah double scrollbar pada body */
+        }
+
+        /* --- SIDEBAR MODERN STYLE --- */
+        .sidebar {
+            width: 420px;
+            background: #f8fafc;
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.02);
+            z-index: 10;
+        }
+
+        .sidebar-header {
+            padding: 24px;
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sidebar-header h3 { 
+            margin: 0; 
+            color: var(--primary); 
+            font-weight: 800; 
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-scroll {
+            flex: 1;
+            overflow-y: auto;
             padding: 20px;
         }
 
-        .container {
-            display: grid;
-            grid-template-columns: 420px 1fr;
-            gap: 25px;
-            max-width: 1750px;
-            margin: 0 auto;
-        }
-
-        /* --- SIDEBAR STYLE --- */
-        .form-section {
+        /* Card Wrapper untuk Input */
+        .input-card {
             background: var(--white);
-            padding: 24px;
-            border-radius: 16px;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
-            height: fit-content;
-            position: sticky;
-            top: 20px;
-            max-height: calc(100vh - 40px);
-            overflow-y: auto;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
             border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
         }
 
-        .form-section h3 { margin: 0 0 20px 0; color: var(--primary); display: flex; align-items: center; gap: 10px; }
-        .section-title { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-light); margin: 20px 0 10px 0; font-weight: 700; border-bottom: 1px solid var(--border); padding-bottom: 5px; }
-        .form-group { margin-bottom: 15px; }
-        label { font-weight: 600; font-size: 12px; display: block; margin-bottom: 6px; }
-        input, textarea, select { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; }
+        .section-title { 
+            font-size: 11px; 
+            text-transform: uppercase; 
+            letter-spacing: 1.2px; 
+            color: var(--primary); 
+            margin-bottom: 15px; 
+            font-weight: 700; 
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .form-group { margin-bottom: 12px; }
+        label { font-weight: 600; font-size: 12px; display: block; margin-bottom: 6px; color: var(--text-dark); }
+        
+        input, textarea, select { 
+            width: 100%; 
+            padding: 10px 12px; 
+            border: 1px solid var(--border); 
+            border-radius: 8px; 
+            font-size: 13px; 
+            background: #fcfdfe;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         
-        .btn-add { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: 600; margin-top: 10px; }
-        .btn-print { background: var(--text-dark); color: white; border: none; padding: 14px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: 600; margin-top: 20px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        /* Buttons */
+        .btn-add { 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            padding: 12px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            width: 100%; 
+            font-weight: 700; 
+            margin-top: 5px;
+            font-size: 12px;
+        }
+        .btn-add:hover { background: var(--primary-hover); transform: translateY(-1px); }
 
-        .item-card { background: #f8fafc; padding: 12px; border-radius: 10px; margin-bottom: 10px; border: 1px solid var(--border); }
-        .item-card-info { font-size: 13px; font-weight: 600; margin-bottom: 8px; }
-        .btn-sm { padding: 5px 10px; border-radius: 5px; font-size: 11px; cursor: pointer; border: none; font-weight: 600; margin-right: 5px; }
-        .btn-edit { background: #dbeafe; color: var(--primary); }
-        .btn-delete { background: #fee2e2; color: var(--danger); }
+        .sidebar-footer {
+            padding: 20px;
+            background: var(--white);
+            border-top: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
 
-        /* --- PRINT AREA STYLE --- */
+        .btn-download {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .btn-print { 
+            background: var(--text-dark); 
+            color: white; 
+            border: none; 
+            padding: 12px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-weight: 700; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        /* Item Cards in Sidebar */
+        .item-card { 
+            background: #f8fafc; 
+            padding: 10px; 
+            border-radius: 8px; 
+            margin-bottom: 8px; 
+            border-left: 4px solid var(--primary);
+            border-top: 1px solid var(--border);
+            border-right: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .item-card-info { font-size: 12px; font-weight: 700; margin-bottom: 8px; }
+
+        /* --- PREVIEW AREA (TIDAK BERUBAH) --- */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 40px;
+            background: #cbd5e1; /* Kontras dengan kertas putih */
+        }
+
         #printArea {
             width: 210mm;
             min-height: 297mm;
             background: white;
             padding: 40px 50px;
             margin: 0 auto;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
         }
 
         .doc-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--primary); padding-bottom: 15px; margin-bottom: 25px; }
         .logo-placeholder { max-width: 200px; }
         .doc-type h1 { margin: 0; color: var(--primary); font-size: 24px; font-weight: 800; }
 
-        /* FIX: Gunakan Table Flexbox agar tidak tumpang tindih */
-        .info-container { 
-            display: flex; 
-            gap: 30px; 
-            margin-bottom: 20px; 
-            width: 100%;
-        }
-        .info-table { 
-            width: 50%; 
-            border-collapse: collapse; 
-        }
-        .info-table td { 
-            vertical-align: top; 
-            padding: 4px 0; 
-            font-size: 12px; 
-            word-break: break-word; /* Biar teks panjang turun ke bawah */
-        }
+        .info-container { display: flex; gap: 30px; margin-bottom: 20px; width: 100%; }
+        .info-table { width: 50%; border-collapse: collapse; }
+        .info-table td { vertical-align: top; padding: 4px 0; font-size: 12px; word-break: break-word; }
         .info-table td.label { width: 100px; font-weight: 700; color: #475569; }
         .info-table td.colon { width: 15px; text-align: center; }
 
@@ -105,29 +218,16 @@
 
         .mockup-img { width: 100%; height: auto; display: block; border-radius: 4px; }
 
-        /* SIGNATURE SECTION */
         .signature-wrapper { margin-top: 40px; }
-        .signature-section { 
-            display: grid; 
-            grid-template-columns: repeat(5, 1fr); 
-            text-align: center; 
-            gap: 5px; 
-        }
-        .sig-box { 
-            min-height: 120px; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: space-between; 
-            font-size: 10px; 
-            padding: 5px; 
-        }
+        .signature-section { display: grid; grid-template-columns: repeat(5, 1fr); text-align: center; gap: 5px; }
+        .sig-box { min-height: 120px; display: flex; flex-direction: column; justify-content: space-between; font-size: 10px; padding: 5px; }
         .sig-title { font-weight: 600; line-height: 1.2; height: 35px; display: flex; align-items: center; justify-content: center; }
         .sig-name { font-weight: 700; text-decoration: underline; text-transform: uppercase; color: var(--text-dark); }
 
         @media print {
-            body { background: white; padding: 0; }
-            .form-section, .btn-print, .btn-sm { display: none !important; }
-            .container { display: block; }
+            body { background: white; }
+            .sidebar { display: none !important; }
+            .main-content { padding: 0; background: white; overflow: visible; }
             #printArea { box-shadow: none; width: 100%; padding: 0; border: none; }
             @page { margin: 10mm; }
         }
@@ -135,68 +235,82 @@
 </head>
 <body>
 
-<div class="container">
-    <div class="form-section">
-        <h3>SPK System</h3>
-        
-        <div class="section-title">Informasi Dokumen</div>
-        <div class="grid-2">
-            <div class="form-group"><label>No. SPK</label><input id="noSPK" readonly style="background:#f8fafc; font-weight: bold;"></div>
-            <div class="form-group">
-                <label>Kertas</label>
-                <select id="paperSize" onchange="updatePaperSize()">
-                    <option value="210mm">A4 Standard</option>
-                    <option value="216mm">F4 / Folio</option>
-                </select>
+<div class="sidebar">
+    <div class="sidebar-header">
+        <h3>SPK SYSTEM</h3>
+    </div>
+
+    <div class="sidebar-scroll">
+        <div class="input-card">
+            <div class="section-title">Informasi Dokumen</div>
+            <div class="grid-2">
+                <div class="form-group"><label>No. SPK</label><input id="noSPK" readonly style="background:#f1f5f9; font-weight: bold; color: var(--primary);"></div>
+                <div class="form-group">
+                    <label>Kertas</label>
+                    <select id="paperSize" onchange="updatePaperSize()">
+                        <option value="210mm">A4 Standard</option>
+                        <option value="216mm">F4 / Folio</option>
+                    </select>
+                </div>
+            </div>
+            <div class="grid-2">
+                <div class="form-group"><label>Tgl SPK</label><input id="tanggalSPK" type="date"></div>
+                <div class="form-group"><label>Deadline</label><input id="deadline" type="date"></div>
             </div>
         </div>
-        <div class="grid-2">
-            <div class="form-group"><label>Tgl SPK</label><input id="tanggalSPK" type="date"></div>
-            <div class="form-group"><label>Deadline</label><input id="deadline" type="date"></div>
+
+        <div class="input-card">
+            <div class="section-title">Pelanggan & Pesanan</div>
+            <div class="form-group"><label>Nama Order</label><input id="namaOrder" placeholder="Contoh: HUT RI / Kaos Event"></div>
+            <div class="form-group"><label>Nama Customer</label><input id="namaCustomer" placeholder="Nama instansi/orang"></div>
+            <div class="grid-2">
+                <div class="form-group"><label>No. Telp</label><input id="telpCustomer" placeholder="0812..."></div>
+                <div class="form-group"><label>Pengiriman</label><input id="jasaPengiriman" placeholder="Ambil/JNT/Gojek"></div>
+            </div>
+            <div class="form-group"><label>Alamat Lengkap</label><textarea id="alamatCustomer" rows="2"></textarea></div>
         </div>
 
-        <div class="section-title">Pelanggan & Pesanan</div>
-        <div class="form-group"><label>Nama Order</label><input id="namaOrder" placeholder="Contoh: HUT RI / Kaos Event"></div>
-        <div class="form-group"><label>Nama Customer</label><input id="namaCustomer" placeholder="Nama instansi/orang"></div>
-        <div class="grid-2">
-            <div class="form-group"><label>No. Telp</label><input id="telpCustomer" placeholder="0812..."></div>
-            <div class="form-group"><label>Pengiriman</label><input id="jasaPengiriman" placeholder="Ambil/JNT/Gojek"></div>
-        </div>
-        <div class="form-group"><label>Alamat Lengkap</label><textarea id="alamatCustomer" rows="3"></textarea></div>
-
-        <div class="section-title">Personalia</div>
-        <div class="grid-2">
-            <div class="form-group"><label>Penerima</label><input id="inPenerimaPesanan" value="ADMIN"></div>
-            <div class="form-group"><label>Manager</label><input id="inManager" value="MANAGER"></div>
-            <div class="form-group"><label>Designer 1</label><input id="inDesign1" value="DESIGNER 1"></div>
-            <div class="form-group"><label>Designer 2</label><input id="inDesign2" value="DESIGNER 2"></div>
-        </div>
-        <div class="form-group"><label>PJ Produksi</label><input id="inPJProduksi" value="SURYADI"></div>
-
-        <div class="section-title">Rincian Barang</div>
-        <div style="background:#eff6ff; padding:15px; border-radius:12px; border: 1px solid #dbeafe;">
+        <div class="input-card">
+            <div class="section-title">Rincian Barang</div>
             <div class="form-group">
                 <label>Upload Mockup</label>
-                <input type="file" id="mockupInput" accept="image/*">
+                <input type="file" id="mockupInput" accept="image/*" style="font-size: 11px; padding: 5px;">
             </div>
             <div class="form-group"><label>Nama Barang</label><input id="namaBarang"></div>
             <div class="grid-2">
                 <div class="form-group"><label>Size</label><input id="ukuranBarang"></div>
                 <div class="form-group"><label>Qty</label><input id="qtyBarang" type="number"></div>
             </div>
-            <div class="form-group"><label>Catatan Spesifikasi</label><textarea id="catatanBarang" rows="3"></textarea></div>
-            <button class="btn-add" onclick="tambahBarang()" id="btnSubmitItem">TAMBAH BARANG</button>
+            <div class="form-group"><label>Spesifikasi</label><textarea id="catatanBarang" rows="2"></textarea></div>
+            <button class="btn-add" onclick="tambahBarang()" id="btnSubmitItem">＋ TAMBAH KE TABEL</button>
+            
+            <div id="sidebarList" style="margin-top:15px;"></div>
         </div>
 
-        <div class="sidebar-item-list" id="sidebarList" style="margin-top:15px;"></div>
-        <button class="btn-print" onclick="window.print()">🖨️ CETAK DOKUMEN SPK</button>
+        <div class="input-card">
+            <div class="section-title">Personalia</div>
+            <div class="grid-2">
+                <div class="form-group"><label>Penerima</label><input id="inPenerimaPesanan" value="ADMIN"></div>
+                <div class="form-group"><label>Manager</label><input id="inManager" value="MANAGER"></div>
+                <div class="form-group"><label>Design 1</label><input id="inDesign1" value="DESIGNER 1"></div>
+                <div class="form-group"><label>Design 2</label><input id="inDesign2" value="DESIGNER 2"></div>
+            </div>
+            <div class="form-group"><label>PJ Produksi</label><input id="inPJProduksi" value="SURYADI"></div>
+        </div>
     </div>
 
+    <div class="sidebar-footer">
+        <button class="btn-download" onclick="downloadPDF()">💾 DOWNLOAD PDF</button>
+        <button class="btn-print" onclick="window.print()">🖨️ CETAK SEKARANG</button>
+    </div>
+</div>
+
+<div class="main-content">
     <div id="printArea">
         <div class="doc-header">
             <img src="./LOGO BHINNEKA.png" class="logo-placeholder" onerror="this.src='https://via.placeholder.com/200x60?text=BHINNEKA+LOGO'">
             <div style="text-align:right">
-                <h1>SURAT PERINTAH KERJA</h1>
+                <h1 style="margin:0; color:var(--primary); font-size:24px;">SURAT PERINTAH KERJA</h1>
                 <div id="pNoHeader" style="font-weight:700; font-size:14px; color: var(--text-light);"></div>
             </div>
         </div>
@@ -269,7 +383,7 @@
             mockup: mockupTemp
         };
         if(editIndex === -1) { daftarBarang.push(itemData); } 
-        else { daftarBarang[editIndex] = itemData; editIndex = -1; document.getElementById('btnSubmitItem').innerText = "TAMBAH BARANG"; }
+        else { daftarBarang[editIndex] = itemData; editIndex = -1; document.getElementById('btnSubmitItem').innerText = "＋ TAMBAH KE TABEL"; }
         resetItemForm();
         updatePreview();
     }
@@ -282,7 +396,7 @@
         qtyBarang.value = item.qty;
         catatanBarang.value = item.catatan;
         mockupTemp = item.mockup;
-        document.getElementById('btnSubmitItem').innerText = "SIMPAN PERUBAHAN";
+        document.getElementById('btnSubmitItem').innerText = "💾 SIMPAN PERUBAHAN";
     }
 
     function hapusBarang(i) {
@@ -323,8 +437,10 @@
             sidebarList.innerHTML += `
                 <div class="item-card">
                     <div class="item-card-info">${i+1}. ${b.nama.toUpperCase()}</div>
-                    <button class="btn-sm btn-edit" onclick="editBarang(${i})">Edit</button>
-                    <button class="btn-sm btn-delete" onclick="hapusBarang(${i})">Hapus</button>
+                    <div style="display:flex; gap:5px;">
+                        <button class="btn-sm" style="background:#dbeafe; color:#2563eb; border:none; padding:4px 8px; border-radius:4px; font-size:10px; cursor:pointer;" onclick="editBarang(${i})">Edit</button>
+                        <button class="btn-sm" style="background:#fee2e2; color:#ef4444; border:none; padding:4px 8px; border-radius:4px; font-size:10px; cursor:pointer;" onclick="hapusBarang(${i})">Hapus</button>
+                    </div>
                 </div>`;
         });
     }
@@ -337,6 +453,39 @@
     }
 
     function updatePaperSize() { printArea.style.width = paperSize.value; }
+
+    // FITUR DOWNLOAD PDF
+   function downloadPDF() {
+    const element = document.getElementById('printArea');
+    const selectedWidth = paperSize.value === '210mm' ? 210 : 215.9; // Lebar mm
+    const selectedHeight = paperSize.value === '210mm' ? 297 : 330.2; // Tinggi mm (A4 vs F4/Legal)
+
+    // Ambil lebar pixel asli dari elemen saat ini untuk presisi canvas
+    const elementWidthPx = element.offsetWidth;
+
+    const opt = {
+        margin: 0, // Margin nol karena kita ingin presisi sesuai elemen
+        filename: 'SPK-' + (namaOrder.value || 'Dokumen') + '.pdf',
+        image: { type: 'jpeg', quality: 1 },
+        html2canvas: { 
+            scale: 2, // Kualitas tinggi
+            useCORS: true, 
+            width: elementWidthPx, // Kunci lebar canvas sesuai lebar elemen web
+            scrollX: 0,
+            scrollY: 0,
+            windowWidth: document.documentElement.offsetWidth 
+        },
+        jsPDF: { 
+            unit: 'mm', 
+            format: [selectedWidth, selectedHeight], // Kunci ukuran kertas di sini
+            orientation: 'portrait' 
+        }
+    };
+
+    // Jalankan konversi
+    html2pdf().set(opt).from(element).save();
+}
+
     document.querySelectorAll("input, textarea").forEach(el => el.addEventListener("input", updatePreview));
 </script>
 
