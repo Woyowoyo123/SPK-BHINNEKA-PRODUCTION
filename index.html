@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bhinneka Production - SPK System</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    
+
     <style>
         :root {
             --primary: #2563eb;
@@ -22,7 +23,10 @@
             --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
         }
 
-        * { box-sizing: border-box; transition: all 0.2s ease; }
+        * {
+            box-sizing: border-box;
+            transition: all 0.2s ease;
+        }
 
         body {
             font-family: 'Inter', sans-serif;
@@ -31,7 +35,8 @@
             margin: 0;
             display: flex;
             height: 100vh;
-            overflow: hidden; /* Mencegah double scrollbar pada body */
+            overflow: hidden;
+            /* Mencegah double scrollbar pada body */
         }
 
         /* --- SIDEBAR MODERN STYLE --- */
@@ -42,7 +47,7 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
-            box-shadow: 4px 0 10px rgba(0,0,0,0.02);
+            box-shadow: 4px 0 10px rgba(0, 0, 0, 0.02);
             z-index: 10;
         }
 
@@ -52,10 +57,10 @@
             border-bottom: 1px solid var(--border);
         }
 
-        .sidebar-header h3 { 
-            margin: 0; 
-            color: var(--primary); 
-            font-weight: 800; 
+        .sidebar-header h3 {
+            margin: 0;
+            color: var(--primary);
+            font-weight: 800;
             font-size: 20px;
             display: flex;
             align-items: center;
@@ -78,13 +83,13 @@
             box-shadow: var(--shadow-sm);
         }
 
-        .section-title { 
-            font-size: 11px; 
-            text-transform: uppercase; 
-            letter-spacing: 1.2px; 
-            color: var(--primary); 
-            margin-bottom: 15px; 
-            font-weight: 700; 
+        .section-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-weight: 700;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -97,40 +102,60 @@
             background: var(--border);
         }
 
-        .form-group { margin-bottom: 12px; }
-        label { font-weight: 600; font-size: 12px; display: block; margin-bottom: 6px; color: var(--text-dark); }
-        
-        input, textarea, select { 
-            width: 100%; 
-            padding: 10px 12px; 
-            border: 1px solid var(--border); 
-            border-radius: 8px; 
-            font-size: 13px; 
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        label {
+            font-weight: 600;
+            font-size: 12px;
+            display: block;
+            margin-bottom: 6px;
+            color: var(--text-dark);
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 13px;
             background: #fcfdfe;
         }
 
-        input:focus, textarea:focus {
+        input:focus,
+        textarea:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
         /* Buttons */
-        .btn-add { 
-            background: var(--primary); 
-            color: white; 
-            border: none; 
-            padding: 12px; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            width: 100%; 
-            font-weight: 700; 
+        .btn-add {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 700;
             margin-top: 5px;
             font-size: 12px;
         }
-        .btn-add:hover { background: var(--primary-hover); transform: translateY(-1px); }
+
+        .btn-add:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
 
         .sidebar-footer {
             padding: 20px;
@@ -156,41 +181,46 @@
             font-size: 14px;
         }
 
-        .btn-print { 
-            background: var(--text-dark); 
-            color: white; 
-            border: none; 
-            padding: 12px; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            font-weight: 700; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
+        .btn-print {
+            background: var(--text-dark);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             gap: 8px;
             font-size: 14px;
         }
 
         /* Item Cards in Sidebar */
-        .item-card { 
-            background: #f8fafc; 
-            padding: 10px; 
-            border-radius: 8px; 
-            margin-bottom: 8px; 
+        .item-card {
+            background: #f8fafc;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 8px;
             border-left: 4px solid var(--primary);
             border-top: 1px solid var(--border);
             border-right: 1px solid var(--border);
             border-bottom: 1px solid var(--border);
         }
-        
-        .item-card-info { font-size: 12px; font-weight: 700; margin-bottom: 8px; }
+
+        .item-card-info {
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
 
         /* --- PREVIEW AREA (TIDAK BERUBAH) --- */
         .main-content {
             flex: 1;
             overflow-y: auto;
             padding: 40px;
-            background: #cbd5e1; /* Kontras dengan kertas putih */
+            background: #cbd5e1;
+            /* Kontras dengan kertas putih */
         }
 
         #printArea {
@@ -199,295 +229,457 @@
             background: white;
             padding: 40px 50px;
             margin: 0 auto;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
         }
 
-        .doc-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--primary); padding-bottom: 15px; margin-bottom: 25px; }
-        .logo-placeholder { max-width: 200px; }
-        .doc-type h1 { margin: 0; color: var(--primary); font-size: 24px; font-weight: 800; }
+        .doc-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
 
-        .info-container { display: flex; gap: 30px; margin-bottom: 20px; width: 100%; }
-        .info-table { width: 50%; border-collapse: collapse; }
-        .info-table td { vertical-align: top; padding: 4px 0; font-size: 12px; word-break: break-word; }
-        .info-table td.label { width: 100px; font-weight: 700; color: #475569; }
-        .info-table td.colon { width: 15px; text-align: center; }
+        .logo-placeholder {
+            max-width: 200px;
+        }
 
-        .main-table { width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; }
-        .main-table th { background: #f8fafc; border: 1px solid var(--border); padding: 10px 8px; font-size: 11px; text-transform: uppercase; }
-        .main-table td { border: 1px solid var(--border); padding: 12px 10px; font-size: 12px; vertical-align: top; word-wrap: break-word; }
+        .doc-type h1 {
+            margin: 0;
+            color: var(--primary);
+            font-size: 24px;
+            font-weight: 800;
+        }
 
-        .mockup-img { width: 100%; height: auto; display: block; border-radius: 4px; }
+        .info-container {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
 
-        .signature-wrapper { margin-top: 40px; }
-        .signature-section { display: grid; grid-template-columns: repeat(5, 1fr); text-align: center; gap: 5px; }
-        .sig-box { min-height: 120px; display: flex; flex-direction: column; justify-content: space-between; font-size: 10px; padding: 5px; }
-        .sig-title { font-weight: 600; line-height: 1.2; height: 35px; display: flex; align-items: center; justify-content: center; }
-        .sig-name { font-weight: 700; text-decoration: underline; text-transform: uppercase; color: var(--text-dark); }
+        .info-table {
+            width: 50%;
+            border-collapse: collapse;
+        }
+
+        .info-table td {
+            vertical-align: top;
+            padding: 4px 0;
+            font-size: 12px;
+            word-break: break-word;
+        }
+
+        .info-table td.label {
+            width: 100px;
+            font-weight: 700;
+            color: #475569;
+        }
+
+        .info-table td.colon {
+            width: 15px;
+            text-align: center;
+        }
+
+        .main-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            table-layout: fixed;
+        }
+
+        .main-table th {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            padding: 10px 8px;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+
+        .main-table td {
+            border: 1px solid var(--border);
+            padding: 12px 10px;
+            font-size: 12px;
+            vertical-align: top;
+            word-wrap: break-word;
+        }
+
+        .mockup-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 4px;
+        }
+
+        /* Menjamin grup tanda tangan tidak terpotong antar halaman */
+        .signature-wrapper {
+            margin-top: 40px;
+            page-break-inside: avoid;
+            /* Kunci utama */
+        }
+
+        .signature-section {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            text-align: center;
+            gap: 5px;
+            page-break-inside: avoid;
+        }
+
+        .sig-box {
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            font-size: 10px;
+            padding: 5px;
+            page-break-inside: avoid;
+            /* Memastikan jabatan & nama tetap satu grup */
+        }
+
+        .sig-title {
+            font-weight: 600;
+            line-height: 1.2;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sig-name {
+            font-weight: 700;
+            text-decoration: underline;
+            text-transform: uppercase;
+            color: var(--text-dark);
+        }
 
         @media print {
-            body { background: white; }
-            .sidebar { display: none !important; }
-            .main-content { padding: 0; background: white; overflow: visible; }
-            #printArea { box-shadow: none; width: 100%; padding: 0; border: none; }
-            @page { margin: 10mm; }
+            body {
+                background: white;
+            }
+
+            .sidebar {
+                display: none !important;
+            }
+
+            .main-content {
+                padding: 0;
+                background: white;
+                overflow: visible;
+            }
+
+            #printArea {
+                box-shadow: none;
+                width: 100%;
+                padding: 0;
+                border: none;
+            }
+
+            @page {
+                margin: 10mm;
+            }
         }
     </style>
 </head>
+
 <body>
 
-<div class="sidebar">
-    <div class="sidebar-header">
-        <h3>SPK SYSTEM</h3>
-    </div>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3>SPK SYSTEM</h3>
+        </div>
 
-    <div class="sidebar-scroll">
-        <div class="input-card">
-            <div class="section-title">Informasi Dokumen</div>
-            <div class="grid-2">
-                <div class="form-group"><label>No. SPK</label><input id="noSPK" readonly style="background:#f1f5f9; font-weight: bold; color: var(--primary);"></div>
-                <div class="form-group">
-                    <label>Kertas</label>
-                    <select id="paperSize" onchange="updatePaperSize()">
-                        <option value="210mm">A4 Standard</option>
-                        <option value="216mm">F4 / Folio</option>
-                    </select>
+        <div class="sidebar-scroll">
+            <div class="input-card">
+                <div class="section-title">Informasi Dokumen</div>
+                <div class="grid-2">
+                    <div class="form-group"><label>No. SPK</label><input id="noSPK" readonly
+                            style="background:#f1f5f9; font-weight: bold; color: var(--primary);"></div>
+                    <div class="form-group">
+                        <label>Kertas</label>
+                        <select id="paperSize" onchange="updatePaperSize()">
+                            <option value="210mm">A4 Standard</option>
+                            <option value="216mm">F4 / Folio</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group"><label>Tgl SPK</label><input id="tanggalSPK" type="date"></div>
+                    <div class="form-group"><label>Deadline</label><input id="deadline" type="date"></div>
                 </div>
             </div>
-            <div class="grid-2">
-                <div class="form-group"><label>Tgl SPK</label><input id="tanggalSPK" type="date"></div>
-                <div class="form-group"><label>Deadline</label><input id="deadline" type="date"></div>
+
+            <div class="input-card">
+                <div class="section-title">Pelanggan & Pesanan</div>
+                <div class="form-group"><label>Nama Order</label><input id="namaOrder"
+                        placeholder="Contoh: HUT RI / Kaos Event"></div>
+                <div class="form-group"><label>Nama Customer</label><input id="namaCustomer"
+                        placeholder="Nama instansi/orang"></div>
+                <div class="grid-2">
+                    <div class="form-group"><label>No. Telp</label><input id="telpCustomer" placeholder="0812..."></div>
+                    <div class="form-group"><label>Pengiriman</label><input id="jasaPengiriman"
+                            placeholder="Ambil/JNT/Gojek"></div>
+                </div>
+                <div class="form-group"><label>Alamat Lengkap</label><textarea id="alamatCustomer" rows="2"></textarea>
+                </div>
+            </div>
+
+            <div class="input-card">
+                <div class="section-title">Rincian Barang</div>
+                <div class="form-group">
+                    <label>Upload Mockup</label>
+                    <input type="file" id="mockupInput" accept="image/*" style="font-size: 11px; padding: 5px;">
+                </div>
+                <div class="form-group"><label>Nama Barang</label><input id="namaBarang"></div>
+                <div class="grid-2">
+                    <div class="form-group"><label>Size</label><input id="ukuranBarang"></div>
+                    <div class="form-group"><label>Qty</label><input id="qtyBarang" type="number"></div>
+                </div>
+                <div class="form-group"><label>Spesifikasi</label><textarea id="catatanBarang" rows="2"></textarea>
+                </div>
+                <button class="btn-add" onclick="tambahBarang()" id="btnSubmitItem">＋ TAMBAH KE TABEL</button>
+
+                <div id="sidebarList" style="margin-top:15px;"></div>
+            </div>
+
+            <div class="input-card">
+                <div class="section-title">Personalia</div>
+                <div class="grid-2">
+                    <div class="form-group"><label>Penerima</label><input id="inPenerimaPesanan" value="ADMIN"></div>
+                    <div class="form-group"><label>Manager</label><input id="inManager" value="MANAGER"></div>
+                    <div class="form-group"><label>Design 1</label><input id="inDesign1" value="DESIGNER 1"></div>
+                    <div class="form-group"><label>Design 2</label><input id="inDesign2" value="DESIGNER 2"></div>
+                </div>
+                <div class="form-group"><label>PJ Produksi</label><input id="inPJProduksi" value="SURYADI"></div>
             </div>
         </div>
 
-        <div class="input-card">
-            <div class="section-title">Pelanggan & Pesanan</div>
-            <div class="form-group"><label>Nama Order</label><input id="namaOrder" placeholder="Contoh: HUT RI / Kaos Event"></div>
-            <div class="form-group"><label>Nama Customer</label><input id="namaCustomer" placeholder="Nama instansi/orang"></div>
-            <div class="grid-2">
-                <div class="form-group"><label>No. Telp</label><input id="telpCustomer" placeholder="0812..."></div>
-                <div class="form-group"><label>Pengiriman</label><input id="jasaPengiriman" placeholder="Ambil/JNT/Gojek"></div>
-            </div>
-            <div class="form-group"><label>Alamat Lengkap</label><textarea id="alamatCustomer" rows="2"></textarea></div>
-        </div>
-
-        <div class="input-card">
-            <div class="section-title">Rincian Barang</div>
-            <div class="form-group">
-                <label>Upload Mockup</label>
-                <input type="file" id="mockupInput" accept="image/*" style="font-size: 11px; padding: 5px;">
-            </div>
-            <div class="form-group"><label>Nama Barang</label><input id="namaBarang"></div>
-            <div class="grid-2">
-                <div class="form-group"><label>Size</label><input id="ukuranBarang"></div>
-                <div class="form-group"><label>Qty</label><input id="qtyBarang" type="number"></div>
-            </div>
-            <div class="form-group"><label>Spesifikasi</label><textarea id="catatanBarang" rows="2"></textarea></div>
-            <button class="btn-add" onclick="tambahBarang()" id="btnSubmitItem">＋ TAMBAH KE TABEL</button>
-            
-            <div id="sidebarList" style="margin-top:15px;"></div>
-        </div>
-
-        <div class="input-card">
-            <div class="section-title">Personalia</div>
-            <div class="grid-2">
-                <div class="form-group"><label>Penerima</label><input id="inPenerimaPesanan" value="ADMIN"></div>
-                <div class="form-group"><label>Manager</label><input id="inManager" value="MANAGER"></div>
-                <div class="form-group"><label>Design 1</label><input id="inDesign1" value="DESIGNER 1"></div>
-                <div class="form-group"><label>Design 2</label><input id="inDesign2" value="DESIGNER 2"></div>
-            </div>
-            <div class="form-group"><label>PJ Produksi</label><input id="inPJProduksi" value="SURYADI"></div>
+        <div class="sidebar-footer">
+            <button class="btn-download" onclick="downloadPDF()">💾 DOWNLOAD PDF</button>
+            <button class="btn-print" onclick="window.print()">🖨️ CETAK SEKARANG</button>
         </div>
     </div>
 
-    <div class="sidebar-footer">
-        <button class="btn-download" onclick="downloadPDF()">💾 DOWNLOAD PDF</button>
-        <button class="btn-print" onclick="window.print()">🖨️ CETAK SEKARANG</button>
-    </div>
-</div>
-
-<div class="main-content">
-    <div id="printArea">
-        <div class="doc-header">
-            <img src="./LOGO BHINNEKA.png" class="logo-placeholder" onerror="this.src='https://via.placeholder.com/200x60?text=BHINNEKA+LOGO'">
-            <div style="text-align:right">
-                <h1 style="margin:0; color:var(--primary); font-size:24px;">SURAT PERINTAH KERJA</h1>
-                <div id="pNoHeader" style="font-weight:700; font-size:14px; color: var(--text-light);"></div>
+    <div class="main-content">
+        <div id="printArea">
+            <div class="doc-header">
+                <img src="./LOGO BHINNEKA.png" class="logo-placeholder"
+                    onerror="this.src='https://via.placeholder.com/200x60?text=BHINNEKA+LOGO'">
+                <div style="text-align:right">
+                    <h1 style="margin:0; color:var(--primary); font-size:24px;">SURAT PERINTAH KERJA</h1>
+                    <div id="pNoHeader" style="font-weight:700; font-size:14px; color: var(--text-light);"></div>
+                </div>
             </div>
-        </div>
 
-        <div class="info-container">
-            <table class="info-table">
-                <tr><td class="label">NAMA ORDER</td><td class="colon">:</td><td id="pOrder"></td></tr>
-                <tr><td class="label">CUSTOMER</td><td class="colon">:</td><td id="pCustomer"></td></tr>
-                <tr><td class="label">TELP</td><td class="colon">:</td><td id="pTelp"></td></tr>
-                <tr><td class="label">ALAMAT</td><td class="colon">:</td><td id="pAlamat" style="line-height:1.4"></td></tr>
+            <div class="info-container">
+                <table class="info-table">
+                    <tr>
+                        <td class="label">NAMA ORDER</td>
+                        <td class="colon">:</td>
+                        <td id="pOrder"></td>
+                    </tr>
+                    <tr>
+                        <td class="label">CUSTOMER</td>
+                        <td class="colon">:</td>
+                        <td id="pCustomer"></td>
+                    </tr>
+                    <tr>
+                        <td class="label">TELP</td>
+                        <td class="colon">:</td>
+                        <td id="pTelp"></td>
+                    </tr>
+                    <tr>
+                        <td class="label">ALAMAT</td>
+                        <td class="colon">:</td>
+                        <td id="pAlamat" style="line-height:1.4"></td>
+                    </tr>
+                </table>
+                <table class="info-table">
+                    <tr>
+                        <td class="label">TANGGAL SPK</td>
+                        <td class="colon">:</td>
+                        <td id="pTanggal"></td>
+                    </tr>
+                    <tr>
+                        <td class="label">DEADLINE</td>
+                        <td class="colon">:</td>
+                        <td id="pDeadline" style="color:var(--danger); font-weight:bold"></td>
+                    </tr>
+                    <tr>
+                        <td class="label">PENGIRIMAN</td>
+                        <td class="colon">:</td>
+                        <td id="pKirim"></td>
+                    </tr>
+                </table>
+            </div>
+
+            <table class="main-table">
+                <thead>
+                    <tr>
+                        <th style="width:35px">NO</th>
+                        <th style="width:220px">MOCKUP DESAIN</th>
+                        <th style="width:130px">NAMA BARANG</th>
+                        <th style="width:55px">SIZE</th>
+                        <th style="width:45px">QTY</th>
+                        <th>CATATAN SPESIFIKASI</th>
+                    </tr>
+                </thead>
+                <tbody id="pBarang"></tbody>
             </table>
-            <table class="info-table">
-                <tr><td class="label">TANGGAL SPK</td><td class="colon">:</td><td id="pTanggal"></td></tr>
-                <tr><td class="label">DEADLINE</td><td class="colon">:</td><td id="pDeadline" style="color:var(--danger); font-weight:bold"></td></tr>
-                <tr><td class="label">PENGIRIMAN</td><td class="colon">:</td><td id="pKirim"></td></tr>
-            </table>
-        </div>
 
-        <table class="main-table">
-            <thead>
-                <tr>
-                    <th style="width:35px">NO</th>
-                    <th style="width:220px">MOCKUP DESAIN</th>
-                    <th style="width:130px">NAMA BARANG</th>
-                    <th style="width:55px">SIZE</th>
-                    <th style="width:45px">QTY</th>
-                    <th>CATATAN SPESIFIKASI</th>
-                </tr>
-            </thead>
-            <tbody id="pBarang"></tbody>
-        </table>
-
-        <div class="signature-wrapper">
-            <div class="signature-section">
-                <div class="sig-box"><div class="sig-title">Penerima Pesanan</div><span class="sig-name" id="pPenerimaPesanan"></span></div>
-                <div class="sig-box"><div class="sig-title">Manager Operasional</div><span class="sig-name" id="pManager"></span></div>
-                <div class="sig-box"><div class="sig-title">Designer Grafis 1</div><span class="sig-name" id="pDesign1"></span></div>
-                <div class="sig-box"><div class="sig-title">Designer Grafis 2</div><span class="sig-name" id="pDesign2"></span></div>
-                <div class="sig-box"><div class="sig-title">PJ Produksi</div><span class="sig-name" id="pPJProduksi"></span></div>
+            <div class="signature-wrapper">
+                <div class="signature-section">
+                    <div class="sig-box">
+                        <div class="sig-title">Penerima Pesanan</div><span class="sig-name"
+                            id="pPenerimaPesanan"></span>
+                    </div>
+                    <div class="sig-box">
+                        <div class="sig-title">Manager Operasional</div><span class="sig-name" id="pManager"></span>
+                    </div>
+                    <div class="sig-box">
+                        <div class="sig-title">Designer Grafis 1</div><span class="sig-name" id="pDesign1"></span>
+                    </div>
+                    <div class="sig-box">
+                        <div class="sig-title">Designer Grafis 2</div><span class="sig-name" id="pDesign2"></span>
+                    </div>
+                    <div class="sig-box">
+                        <div class="sig-title">PJ Produksi</div><span class="sig-name" id="pPJProduksi"></span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<script>
-    let daftarBarang = [];
-    let mockupTemp = null;
-    let editIndex = -1;
+    <script>
+        let daftarBarang = [];
+        let mockupTemp = null;
+        let editIndex = -1;
 
-    document.addEventListener("DOMContentLoaded", () => {
-        let t = new Date();
-        noSPK.value = `SPK/${Math.floor(Math.random()*900)+100}/${t.getFullYear()}`;
-        tanggalSPK.value = t.toISOString().split("T")[0];
-        updatePreview();
-    });
+        document.addEventListener("DOMContentLoaded", () => {
+            let t = new Date();
+            noSPK.value = `SPK/${Math.floor(Math.random() * 900) + 100}/${t.getFullYear()}`;
+            tanggalSPK.value = t.toISOString().split("T")[0];
+            updatePreview();
+        });
 
-    mockupInput.addEventListener("change", e => {
-        let r = new FileReader();
-        r.onload = () => mockupTemp = r.result;
-        if(e.target.files[0]) r.readAsDataURL(e.target.files[0]);
-    });
+        mockupInput.addEventListener("change", e => {
+            let r = new FileReader();
+            r.onload = () => mockupTemp = r.result;
+            if (e.target.files[0]) r.readAsDataURL(e.target.files[0]);
+        });
 
-    function tambahBarang() {
-        if(!namaBarang.value) return alert("Isi nama barang!");
-        const itemData = {
-            nama: namaBarang.value,
-            ukuran: ukuranBarang.value,
-            qty: qtyBarang.value,
-            catatan: catatanBarang.value,
-            mockup: mockupTemp
-        };
-        if(editIndex === -1) { daftarBarang.push(itemData); } 
-        else { daftarBarang[editIndex] = itemData; editIndex = -1; document.getElementById('btnSubmitItem').innerText = "＋ TAMBAH KE TABEL"; }
-        resetItemForm();
-        updatePreview();
-    }
+        function tambahBarang() {
+            if (!namaBarang.value) return alert("Isi nama barang!");
+            const itemData = {
+                nama: namaBarang.value,
+                ukuran: ukuranBarang.value,
+                qty: qtyBarang.value,
+                catatan: catatanBarang.value,
+                mockup: mockupTemp
+            };
+            if (editIndex === -1) { daftarBarang.push(itemData); }
+            else { daftarBarang[editIndex] = itemData; editIndex = -1; document.getElementById('btnSubmitItem').innerText = "＋ TAMBAH KE TABEL"; }
+            resetItemForm();
+            updatePreview();
+        }
 
-    function editBarang(i) {
-        editIndex = i;
-        const item = daftarBarang[i];
-        namaBarang.value = item.nama;
-        ukuranBarang.value = item.ukuran;
-        qtyBarang.value = item.qty;
-        catatanBarang.value = item.catatan;
-        mockupTemp = item.mockup;
-        document.getElementById('btnSubmitItem').innerText = "💾 SIMPAN PERUBAHAN";
-    }
+        function editBarang(i) {
+            editIndex = i;
+            const item = daftarBarang[i];
+            namaBarang.value = item.nama;
+            ukuranBarang.value = item.ukuran;
+            qtyBarang.value = item.qty;
+            catatanBarang.value = item.catatan;
+            mockupTemp = item.mockup;
+            document.getElementById('btnSubmitItem').innerText = "💾 SIMPAN PERUBAHAN";
+        }
 
-    function hapusBarang(i) {
-        if(confirm("Hapus barang?")) { daftarBarang.splice(i,1); updatePreview(); }
-    }
+        function hapusBarang(i) {
+            if (confirm("Hapus barang?")) { daftarBarang.splice(i, 1); updatePreview(); }
+        }
 
-    function resetItemForm() {
-        mockupTemp = null; mockupInput.value = "";
-        namaBarang.value = ""; ukuranBarang.value = ""; qtyBarang.value = ""; catatanBarang.value = "";
-    }
+        function resetItemForm() {
+            mockupTemp = null; mockupInput.value = "";
+            namaBarang.value = ""; ukuranBarang.value = ""; qtyBarang.value = ""; catatanBarang.value = "";
+        }
 
-    function updatePreview() {
-        pNoHeader.innerText = "Nomor: " + noSPK.value;
-        pOrder.innerText = (namaOrder.value || "-").toUpperCase();
-        pCustomer.innerText = (namaCustomer.value || "-").toUpperCase();
-        pTelp.innerText = telpCustomer.value || "-";
-        pAlamat.innerText = alamatCustomer.value || "-";
-        pTanggal.innerText = formatTgl(tanggalSPK.value);
-        pDeadline.innerText = formatTgl(deadline.value);
-        pKirim.innerText = (jasaPengiriman.value || "-").toUpperCase();
+        function updatePreview() {
+            pNoHeader.innerText = "Nomor: " + noSPK.value;
+            pOrder.innerText = (namaOrder.value || "-").toUpperCase();
+            pCustomer.innerText = (namaCustomer.value || "-").toUpperCase();
+            pTelp.innerText = telpCustomer.value || "-";
+            pAlamat.innerText = alamatCustomer.value || "-";
+            pTanggal.innerText = formatTgl(tanggalSPK.value);
+            pDeadline.innerText = formatTgl(deadline.value);
+            pKirim.innerText = (jasaPengiriman.value || "-").toUpperCase();
 
-        pPenerimaPesanan.innerText = inPenerimaPesanan.value;
-        pManager.innerText = inManager.value;
-        pDesign1.innerText = inDesign1.value;
-        pDesign2.innerText = inDesign2.value;
-        pPJProduksi.innerText = inPJProduksi.value;
+            pPenerimaPesanan.innerText = inPenerimaPesanan.value;
+            pManager.innerText = inManager.value;
+            pDesign1.innerText = inDesign1.value;
+            pDesign2.innerText = inDesign2.value;
+            pPJProduksi.innerText = inPJProduksi.value;
 
-        pBarang.innerHTML = ""; sidebarList.innerHTML = "";
-        daftarBarang.forEach((b, i) => {
-            pBarang.innerHTML += `<tr>
-                <td align="center">${i+1}</td>
+            pBarang.innerHTML = ""; sidebarList.innerHTML = "";
+            daftarBarang.forEach((b, i) => {
+                pBarang.innerHTML += `<tr>
+                <td align="center">${i + 1}</td>
                 <td><img src="${b.mockup || 'https://via.placeholder.com/250x150?text=Tanpa+Mockup'}" class="mockup-img"></td>
                 <td style="text-transform:uppercase; font-weight:bold">${b.nama}</td>
                 <td align="center">${b.ukuran}</td>
                 <td align="center">${b.qty}</td>
                 <td style="white-space:pre-line">${b.catatan}</td>
             </tr>`;
-            sidebarList.innerHTML += `
+                sidebarList.innerHTML += `
                 <div class="item-card">
-                    <div class="item-card-info">${i+1}. ${b.nama.toUpperCase()}</div>
+                    <div class="item-card-info">${i + 1}. ${b.nama.toUpperCase()}</div>
                     <div style="display:flex; gap:5px;">
                         <button class="btn-sm" style="background:#dbeafe; color:#2563eb; border:none; padding:4px 8px; border-radius:4px; font-size:10px; cursor:pointer;" onclick="editBarang(${i})">Edit</button>
                         <button class="btn-sm" style="background:#fee2e2; color:#ef4444; border:none; padding:4px 8px; border-radius:4px; font-size:10px; cursor:pointer;" onclick="hapusBarang(${i})">Hapus</button>
                     </div>
                 </div>`;
-        });
-    }
+            });
+        }
 
-    function formatTgl(t) {
-        if(!t) return "-";
-        const d = new Date(t);
-        const bulan = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
-        return d.getDate() + " " + bulan[d.getMonth()] + " " + d.getFullYear();
-    }
+        function formatTgl(t) {
+            if (!t) return "-";
+            const d = new Date(t);
+            const bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+            return d.getDate() + " " + bulan[d.getMonth()] + " " + d.getFullYear();
+        }
 
-    function updatePaperSize() { printArea.style.width = paperSize.value; }
+        function updatePaperSize() { printArea.style.width = paperSize.value; }
 
-    // FITUR DOWNLOAD PDF
-   function downloadPDF() {
+        // FITUR DOWNLOAD PDF
+        function downloadPDF() {
     const element = document.getElementById('printArea');
-    const selectedWidth = paperSize.value === '210mm' ? 210 : 215.9; // Lebar mm
-    const selectedHeight = paperSize.value === '210mm' ? 297 : 330.2; // Tinggi mm (A4 vs F4/Legal)
-
-    // Ambil lebar pixel asli dari elemen saat ini untuk presisi canvas
-    const elementWidthPx = element.offsetWidth;
+    const selectedWidth = paperSize.value === '210mm' ? 210 : 215.9;
+    const selectedHeight = paperSize.value === '210mm' ? 297 : 330.2;
 
     const opt = {
-        margin: 0, // Margin nol karena kita ingin presisi sesuai elemen
+        margin: [10, 0, 10, 0], // Memberi sedikit margin aman atas-bawah di PDF
         filename: 'SPK-' + (namaOrder.value || 'Dokumen') + '.pdf',
         image: { type: 'jpeg', quality: 1 },
         html2canvas: { 
-            scale: 2, // Kualitas tinggi
+            scale: 2, 
             useCORS: true, 
-            width: elementWidthPx, // Kunci lebar canvas sesuai lebar elemen web
-            scrollX: 0,
-            scrollY: 0,
-            windowWidth: document.documentElement.offsetWidth 
+            logging: false 
         },
+        // Tambahkan bagian pagebreak ini
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }, 
         jsPDF: { 
             unit: 'mm', 
-            format: [selectedWidth, selectedHeight], // Kunci ukuran kertas di sini
+            format: [selectedWidth, selectedHeight], 
             orientation: 'portrait' 
         }
     };
 
-    // Jalankan konversi
     html2pdf().set(opt).from(element).save();
 }
 
-    document.querySelectorAll("input, textarea").forEach(el => el.addEventListener("input", updatePreview));
-</script>
+        document.querySelectorAll("input, textarea").forEach(el => el.addEventListener("input", updatePreview));
+    </script>
 
 </body>
+
 </html>
