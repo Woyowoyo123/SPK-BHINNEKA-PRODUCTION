@@ -138,6 +138,51 @@
             gap: 12px;
         }
 
+        /* Radio Group untuk Produksi */
+        .radio-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .radio-option {
+            flex: 1;
+            position: relative;
+        }
+
+        .radio-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .radio-label {
+            display: block;
+            padding: 10px 16px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 12px;
+            background: var(--white);
+            transition: all 0.3s ease;
+        }
+
+        .radio-option input[type="radio"]:checked + .radio-label {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .radio-label:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
         /* Buttons */
         .btn-add {
             background: var(--primary);
@@ -212,6 +257,27 @@
             font-size: 12px;
             font-weight: 700;
             margin-bottom: 8px;
+        }
+
+        .item-card-production {
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            display: inline-block;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .production-outside-badge {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fcd34d;
+        }
+
+        .production-inside-badge {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #93c5fd;
         }
 
         /* --- PREVIEW AREA (TIDAK BERUBAH) --- */
@@ -312,6 +378,27 @@
             border-radius: 4px;
         }
 
+        /* Badge Produksi di Tabel */
+        .production-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-outside {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .badge-inside {
+            background: #1e40af;
+            color: white;
+        }
+
         /* Menjamin grup tanda tangan tidak terpotong antar halaman */
         .signature-wrapper {
             margin-top: 40px;
@@ -376,6 +463,26 @@
                 border: none;
             }
 
+            /* Memastikan warna badge muncul di print */
+            .production-badge {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .badge-outside {
+                background: #f59e0b !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .badge-inside {
+                background: #1e40af !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
             @page {
                 margin: 10mm;
             }
@@ -438,6 +545,26 @@
                 </div>
                 <div class="form-group"><label>Spesifikasi</label><textarea id="catatanBarang" rows="2"></textarea>
                 </div>
+
+                <div class="form-group">
+                    <label>Lokasi Produksi</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="produksiDalam" name="lokasiProduksi" value="dalam" checked>
+                            <label for="produksiDalam" class="radio-label">🏭 DALAM</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="produksiLuar" name="lokasiProduksi" value="luar">
+                            <label for="produksiLuar" class="radio-label">🌐 LUAR</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group" id="keteranganLuarGroup" style="display:none;">
+                    <label>Keterangan Produksi Luar</label>
+                    <input id="keteranganLuar" placeholder="Contoh: CV Maju Jaya, Bandung">
+                </div>
+
                 <button class="btn-add" onclick="tambahBarang()" id="btnSubmitItem">＋ TAMBAH KE TABEL</button>
 
                 <div id="sidebarList" style="margin-top:15px;"></div>
@@ -518,11 +645,12 @@
                 <thead>
                     <tr>
                         <th style="width:35px">NO</th>
-                        <th style="width:220px">MOCKUP DESAIN</th>
-                        <th style="width:130px">NAMA BARANG</th>
+                        <th style="width:200px">MOCKUP DESAIN</th>
+                        <th style="width:120px">NAMA BARANG</th>
                         <th style="width:55px">SIZE</th>
                         <th style="width:45px">QTY</th>
-                        <th>CATATAN SPESIFIKASI</th>
+                        <th style="width:150px">CATATAN SPESIFIKASI</th>
+                        <th style="width:100px">PRODUKSI</th>
                     </tr>
                 </thead>
                 <tbody id="pBarang"></tbody>
@@ -563,6 +691,19 @@
             updatePreview();
         });
 
+        // Toggle keterangan produksi luar
+        document.querySelectorAll('input[name="lokasiProduksi"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const keteranganGroup = document.getElementById('keteranganLuarGroup');
+                if (this.value === 'luar') {
+                    keteranganGroup.style.display = 'block';
+                } else {
+                    keteranganGroup.style.display = 'none';
+                    document.getElementById('keteranganLuar').value = '';
+                }
+            });
+        });
+
         mockupInput.addEventListener("change", e => {
             let r = new FileReader();
             r.onload = () => mockupTemp = r.result;
@@ -571,15 +712,28 @@
 
         function tambahBarang() {
             if (!namaBarang.value) return alert("Isi nama barang!");
+            
+            const lokasiProduksi = document.querySelector('input[name="lokasiProduksi"]:checked').value;
+            const keteranganLuarValue = lokasiProduksi === 'luar' ? keteranganLuar.value : '';
+            
             const itemData = {
                 nama: namaBarang.value,
                 ukuran: ukuranBarang.value,
                 qty: qtyBarang.value,
                 catatan: catatanBarang.value,
-                mockup: mockupTemp
+                mockup: mockupTemp,
+                produksi: lokasiProduksi,
+                keteranganLuar: keteranganLuarValue
             };
-            if (editIndex === -1) { daftarBarang.push(itemData); }
-            else { daftarBarang[editIndex] = itemData; editIndex = -1; document.getElementById('btnSubmitItem').innerText = "＋ TAMBAH KE TABEL"; }
+            
+            if (editIndex === -1) { 
+                daftarBarang.push(itemData); 
+            } else { 
+                daftarBarang[editIndex] = itemData; 
+                editIndex = -1; 
+                document.getElementById('btnSubmitItem').innerText = "＋ TAMBAH KE TABEL"; 
+            }
+            
             resetItemForm();
             updatePreview();
         }
@@ -592,16 +746,37 @@
             qtyBarang.value = item.qty;
             catatanBarang.value = item.catatan;
             mockupTemp = item.mockup;
+            
+            // Set radio button produksi
+            if (item.produksi === 'luar') {
+                document.getElementById('produksiLuar').checked = true;
+                document.getElementById('keteranganLuarGroup').style.display = 'block';
+                document.getElementById('keteranganLuar').value = item.keteranganLuar || '';
+            } else {
+                document.getElementById('produksiDalam').checked = true;
+                document.getElementById('keteranganLuarGroup').style.display = 'none';
+            }
+            
             document.getElementById('btnSubmitItem').innerText = "💾 SIMPAN PERUBAHAN";
         }
 
         function hapusBarang(i) {
-            if (confirm("Hapus barang?")) { daftarBarang.splice(i, 1); updatePreview(); }
+            if (confirm("Hapus barang?")) { 
+                daftarBarang.splice(i, 1); 
+                updatePreview(); 
+            }
         }
 
         function resetItemForm() {
-            mockupTemp = null; mockupInput.value = "";
-            namaBarang.value = ""; ukuranBarang.value = ""; qtyBarang.value = ""; catatanBarang.value = "";
+            mockupTemp = null; 
+            mockupInput.value = "";
+            namaBarang.value = ""; 
+            ukuranBarang.value = ""; 
+            qtyBarang.value = ""; 
+            catatanBarang.value = "";
+            document.getElementById('produksiDalam').checked = true;
+            document.getElementById('keteranganLuarGroup').style.display = 'none';
+            document.getElementById('keteranganLuar').value = '';
         }
 
         function updatePreview() {
@@ -620,19 +795,37 @@
             pDesign2.innerText = inDesign2.value;
             pPJProduksi.innerText = inPJProduksi.value;
 
-            pBarang.innerHTML = ""; sidebarList.innerHTML = "";
+            pBarang.innerHTML = ""; 
+            sidebarList.innerHTML = "";
+            
             daftarBarang.forEach((b, i) => {
+                const badgeClass = b.produksi === 'luar' ? 'badge-outside' : 'badge-inside';
+                const produksiText = b.produksi === 'luar' ? 'LUAR' : 'DALAM';
+                const keteranganLokasi = b.produksi === 'luar' && b.keteranganLuar 
+                    ? `<div style="font-size:10px; margin-top:6px; font-weight:600; color:#92400e;">📍 ${b.keteranganLuar}</div>` 
+                    : '';
+                
                 pBarang.innerHTML += `<tr>
-                <td align="center">${i + 1}</td>
-                <td><img src="${b.mockup || 'https://via.placeholder.com/250x150?text=Tanpa+Mockup'}" class="mockup-img"></td>
-                <td style="text-transform:uppercase; font-weight:bold">${b.nama}</td>
-                <td align="center">${b.ukuran}</td>
-                <td align="center">${b.qty}</td>
-                <td style="white-space:pre-line">${b.catatan}</td>
-            </tr>`;
+                    <td align="center">${i + 1}</td>
+                    <td><img src="${b.mockup || 'https://via.placeholder.com/250x150?text=Tanpa+Mockup'}" class="mockup-img"></td>
+                    <td style="text-transform:uppercase; font-weight:bold">${b.nama}</td>
+                    <td align="center">${b.ukuran}</td>
+                    <td align="center">${b.qty}</td>
+                    <td style="white-space:pre-line">${b.catatan}</td>
+                    <td align="center">
+                        <span class="production-badge ${badgeClass}">${produksiText}</span>
+                        ${keteranganLokasi}
+                    </td>
+                </tr>`;
+                
+                const sidebarBadgeClass = b.produksi === 'luar' ? 'production-outside-badge' : 'production-inside-badge';
+                const sidebarProduksiText = b.produksi === 'luar' ? '🌐 LUAR' : '🏭 DALAM';
+                
                 sidebarList.innerHTML += `
                 <div class="item-card">
                     <div class="item-card-info">${i + 1}. ${b.nama.toUpperCase()}</div>
+                    <span class="item-card-production ${sidebarBadgeClass}">${sidebarProduksiText}</span>
+                    ${b.produksi === 'luar' && b.keteranganLuar ? `<div style="font-size:10px; color:#92400e; margin-bottom:6px;">📍 ${b.keteranganLuar}</div>` : ''}
                     <div style="display:flex; gap:5px;">
                         <button class="btn-sm" style="background:#dbeafe; color:#2563eb; border:none; padding:4px 8px; border-radius:4px; font-size:10px; cursor:pointer;" onclick="editBarang(${i})">Edit</button>
                         <button class="btn-sm" style="background:#fee2e2; color:#ef4444; border:none; padding:4px 8px; border-radius:4px; font-size:10px; cursor:pointer;" onclick="hapusBarang(${i})">Hapus</button>
@@ -648,34 +841,36 @@
             return d.getDate() + " " + bulan[d.getMonth()] + " " + d.getFullYear();
         }
 
-        function updatePaperSize() { printArea.style.width = paperSize.value; }
+        function updatePaperSize() { 
+            printArea.style.width = paperSize.value; 
+        }
 
         // FITUR DOWNLOAD PDF
         function downloadPDF() {
-    const element = document.getElementById('printArea');
-    const selectedWidth = paperSize.value === '210mm' ? 210 : 215.9;
-    const selectedHeight = paperSize.value === '210mm' ? 297 : 330.2;
+            const element = document.getElementById('printArea');
+            const selectedWidth = paperSize.value === '210mm' ? 210 : 215.9;
+            const selectedHeight = paperSize.value === '210mm' ? 297 : 330.2;
 
-    const opt = {
-        margin: [10, 0, 10, 0], // Memberi sedikit margin aman atas-bawah di PDF
-        filename: 'SPK-' + (namaOrder.value || 'Dokumen') + '.pdf',
-        image: { type: 'jpeg', quality: 1 },
-        html2canvas: { 
-            scale: 2, 
-            useCORS: true, 
-            logging: false 
-        },
-        // Tambahkan bagian pagebreak ini
-        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }, 
-        jsPDF: { 
-            unit: 'mm', 
-            format: [selectedWidth, selectedHeight], 
-            orientation: 'portrait' 
+            const opt = {
+                margin: [10, 0, 10, 0], // Memberi sedikit margin aman atas-bawah di PDF
+                filename: 'SPK-' + (namaOrder.value || 'Dokumen') + '.pdf',
+                image: { type: 'jpeg', quality: 1 },
+                html2canvas: { 
+                    scale: 2, 
+                    useCORS: true, 
+                    logging: false 
+                },
+                // Tambahkan bagian pagebreak ini
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }, 
+                jsPDF: { 
+                    unit: 'mm', 
+                    format: [selectedWidth, selectedHeight], 
+                    orientation: 'portrait' 
+                }
+            };
+
+            html2pdf().set(opt).from(element).save();
         }
-    };
-
-    html2pdf().set(opt).from(element).save();
-}
 
         document.querySelectorAll("input, textarea").forEach(el => el.addEventListener("input", updatePreview));
     </script>
